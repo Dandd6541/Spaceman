@@ -25,6 +25,7 @@ let gameStatus;  // null -> game in progress; 'W' -> won; 'L' -> lost
 const replayBtn = document.getElementById('play-again-btn');
 const guessEl = document.getElementById('guess');
 const spacemanImg = document.querySelector('img');
+const letterBtns = [...document.querySelectorAll('article > button')];
 
 /*----- event listeners -----*/
 document.querySelector('article')
@@ -36,7 +37,7 @@ init();
 function init() {
   wrongGuesses = [];
   const rndIdx = Math.floor(Math.random() * WORDS.length);
-  secret = WORDS[rndIdx].split('');
+  secret = WORDS[rndIdx].toUpperCase().split('');
   // map always returns a NEW array of the same # of elements
   guess = secret.map(ltr => ltr === ' ' ? ' ' : '_');
   gameStatus = null;
@@ -54,7 +55,16 @@ function render() {
 }
 
 function renderButtons() {
-
+  letterBtns.forEach(function(btn) {
+    const ltr = btn.textContent;
+    if (wrongGuesses.includes(ltr)) {
+      btn.className = 'wrong';
+    } else if (guess.includes(ltr)) {
+      btn.className = 'correct';
+    } else {
+      btn.className = '';
+    }
+  });
   replayBtn.style.visibility = gameStatus ? 'visible' : 'hidden';
 }
 
@@ -63,10 +73,19 @@ function handleLetterClick(evt) {
   // guards
   if (
     gameStatus ||
-    evt.target.tagName !== 'BUTTON' ||
+    // evt.target.tagName !== 'BUTTON' ||
+    !letterBtns.includes(evt.target) ||
     wrongGuesses.includes(ltr) ||
     guess.includes(ltr)
   ) return;
-
-  console.log(ltr)
+  if ( secret.includes(ltr) ) {
+    // correct guess
+    secret.forEach(function(char, idx) {
+      if (char === ltr) guess[idx] = ltr;
+    });
+  } else {
+    // wrong guess
+    wrongGuesses.push(ltr);
+  }
+  render();
 }

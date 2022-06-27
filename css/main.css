@@ -14,7 +14,7 @@ body {
   display: grid;
   grid-template-rows: 1fr 15fr;
   margin: 0;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Roboto Mono', sans-serif;
 }
 
 header {
@@ -58,11 +58,12 @@ article {
   align-items: center;
   flex-wrap: wrap;
   width: 40vmin;
+  margin-left: 4vmin;
 }
 
 button {
   font-size: 3vmin;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Roboto Mono', sans-serif;
   cursor: pointer;
 }
 
@@ -88,4 +89,16 @@ h2 {
 h1 {
   font-size: 7vmin;
   letter-spacing: 2vmin;
+}
+
+.wrong, .correct {
+  cursor: not-allowed;
+}
+
+.wrong {
+  background-color: var(--red);
+}
+
+.correct {
+  background-color: var(--blue);
 }
