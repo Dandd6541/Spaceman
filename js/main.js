@@ -26,10 +26,12 @@ const replayBtn = document.getElementById('play-again-btn');
 const guessEl = document.getElementById('guess');
 const spacemanImg = document.querySelector('img');
 const letterBtns = [...document.querySelectorAll('article > button')];
+const msgEl = document.querySelector('h2');
 
 /*----- event listeners -----*/
 document.querySelector('article')
   .addEventListener('click', handleLetterClick);
+replayBtn.addEventListener('click', init);
 
 /*----- functions -----*/
 init();
@@ -46,12 +48,23 @@ function init() {
 
 function render() {
   // render the message
+  renderMessage();
   // render the spaceman
   spacemanImg.src = `imgs/spaceman-${wrongGuesses.length}.jpg`;
   // render the guess
   guessEl.textContent = guess.join('');
   // render the buttons
   renderButtons();
+}
+
+function renderMessage() {
+  if (gameStatus === 'W') {
+    msgEl.textContent = 'You Guessed the Secret Word!';
+  } else if (gameStatus === 'L') {
+    msgEl.textContent = "You're Out in Space";
+  } else {
+    msgEl.textContent = `${MAX_WRONG_GUESSES - wrongGuesses.length + 1} Wrong Guesses Remain - Good Luck!`;
+  }
 }
 
 function renderButtons() {
@@ -87,5 +100,12 @@ function handleLetterClick(evt) {
     // wrong guess
     wrongGuesses.push(ltr);
   }
+  gameStatus = getGameStatus();
   render();
+}
+
+function getGameStatus() {
+  if (!guess.includes('_')) return 'W';
+  if (wrongGuesses.length > MAX_WRONG_GUESSES) return 'L';
+  return null;
 }
