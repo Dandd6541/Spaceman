@@ -61,7 +61,7 @@ function renderMessage() {
   if (gameStatus === 'W') {
     msgEl.textContent = 'You Guessed the Secret Word!';
   } else if (gameStatus === 'L') {
-    msgEl.textContent = "You're Out in Space";
+    msgEl.innerHTML = `You're Out in Space<br>The word was ${secret.join('')}`;
   } else {
     msgEl.textContent = `${MAX_WRONG_GUESSES - wrongGuesses.length + 1} Wrong Guesses Remain - Good Luck!`;
   }
@@ -91,6 +91,7 @@ function handleLetterClick(evt) {
     wrongGuesses.includes(ltr) ||
     guess.includes(ltr)
   ) return;
+
   if ( secret.includes(ltr) ) {
     // correct guess
     secret.forEach(function(char, idx) {
@@ -100,6 +101,7 @@ function handleLetterClick(evt) {
     // wrong guess
     wrongGuesses.push(ltr);
   }
+
   gameStatus = getGameStatus();
   render();
 }
