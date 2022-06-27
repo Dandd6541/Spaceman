@@ -1,4 +1,5 @@
 /*----- constants -----*/
+const MAX_WRONG_GUESSES = 5;
 const WORDS = [
   'black hole',
   'planets',
@@ -22,9 +23,12 @@ let gameStatus;  // null -> game in progress; 'W' -> won; 'L' -> lost
 
 /*----- cached element references -----*/
 const replayBtn = document.getElementById('play-again-btn');
+const guessEl = document.getElementById('guess');
+const spacemanImg = document.querySelector('img');
 
 /*----- event listeners -----*/
-
+document.querySelector('article')
+  .addEventListener('click', handleLetterClick);
 
 /*----- functions -----*/
 init();
@@ -42,7 +46,9 @@ function init() {
 function render() {
   // render the message
   // render the spaceman
+  spacemanImg.src = `imgs/spaceman-${wrongGuesses.length}.jpg`;
   // render the guess
+  guessEl.textContent = guess.join('');
   // render the buttons
   renderButtons();
 }
@@ -50,4 +56,17 @@ function render() {
 function renderButtons() {
 
   replayBtn.style.visibility = gameStatus ? 'visible' : 'hidden';
+}
+
+function handleLetterClick(evt) {
+  const ltr = evt.target.textContent;
+  // guards
+  if (
+    gameStatus ||
+    evt.target.tagName !== 'BUTTON' ||
+    wrongGuesses.includes(ltr) ||
+    guess.includes(ltr)
+  ) return;
+
+  console.log(ltr)
 }
